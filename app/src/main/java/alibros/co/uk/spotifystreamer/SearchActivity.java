@@ -24,6 +24,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Track;
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
 
         ButterKnife.inject(this);
 
-        abSpotify = new ABSpotify(abSpotifyListener);
+        abSpotify = new ABSpotify();
 
         searchEditText.addTextChangedListener(new TextWatcher() {
 
@@ -78,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
 
         }
 
-    private ABSpotify.ABSpotifyListener abSpotifyListener = new ABSpotify.ABSpotifyListener() {
+    private ABSpotify.ABSpotifySearchArtistListener abSpotifyListener = new ABSpotify.ABSpotifySearchArtistListener() {
         @Override
         public void onSearchSuccessfulWithResult(final List<Artist> artists) {
 
@@ -92,7 +93,6 @@ public class SearchActivity extends AppCompatActivity {
 
 
                     } else {
-                        Toast.makeText(SearchActivity.this,"found" + artists.get(0).name,Toast.LENGTH_LONG).show();
                         updateRecylcerView(artists);
                     }
                 }
@@ -121,6 +121,13 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void itemClicked(Artist artist) {
 
+                Intent intent = new Intent(SearchActivity.this, TracksActivity.class);
+                intent.putExtra("ARTISTID",artist.id);
+                startActivity(intent);
+
+
+
+
             }
         });
 
@@ -144,7 +151,7 @@ public class SearchActivity extends AppCompatActivity {
     private void triggerSearch() {
 
         String query = searchEditText.getText().toString();
-        abSpotify.searchForArtist(query);
+        abSpotify.searchForArtist(query,abSpotifyListener);
 
 
 

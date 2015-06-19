@@ -2,16 +2,33 @@ package alibros.co.uk.spotifystreamer;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import alibros.co.uk.spotifystreamer.logic.ABSpotify;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class TracksActivity extends ActionBarActivity {
+
+    @InjectView(R.id.results_recyler_view)
+    RecyclerView resultsRecyclerView;
+
+
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter recyclerAdapter;
+    private ABSpotify abSpotify;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track);
+        ButterKnife.inject(this);
+
+        abSpotify = new ABSpotify();
     }
 
 

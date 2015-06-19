@@ -7,5 +7,6 @@
     <string name="title_activity_track">TrackActivity</string>
     <string name="title_activity_player">PlayerActivity</string>
     <string name="tag_cell_position">CELLPOSITIONTAG</string>
+    <string name="defaulf_image_path">https://developer.android.com/assets/images/android_logo@2x.png</string>
 
 </resources>

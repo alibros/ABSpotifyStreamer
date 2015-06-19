@@ -14,33 +14,34 @@ import java.util.List;
 import alibros.co.uk.spotifystreamer.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by Ali on 19/06/15.
  */
-public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
+public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecyclerViewAdapter.ViewHolder> {
 
-    private final SearchRecyclerViewAdapterListener listener;
-    private List<Artist> artists;
+    private final TracksRecyclerViewAdapterListener listener;
+    private List<Track> tracks;
 
-    public interface SearchRecyclerViewAdapterListener{
+    public interface TracksRecyclerViewAdapterListener{
 
-        void itemClicked(Artist artist);
+        void itemClicked(Track track);
 
     }
 
 
-    public SearchRecyclerViewAdapter(List<Artist> artists, SearchRecyclerViewAdapterListener listener) {
-        this.artists = artists;
+    public TracksRecyclerViewAdapter(List<Track> artists, TracksRecyclerViewAdapterListener listener) {
+        this.tracks = artists;
         this.listener = listener;
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @InjectView(R.id.artist_name_textview) TextView artistName;
-        @InjectView(R.id.artist_image_view) ImageView artistImageView;
+        @InjectView(R.id.track_name) TextView trackName;
+        @InjectView(R.id.album_name) TextView albumName;
+        @InjectView(R.id.track_image_view) ImageView albumImage;
 
 
         public ViewHolder(View view) {
@@ -52,15 +53,15 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         @Override
         public void onClick(View view) {
             int position = (int)view.getTag(R.string.tag_cell_position);
-            listener.itemClicked(artists.get(position));
+            listener.itemClicked(tracks.get(position));
 
         }
     }
 
 
     @Override
-    public SearchRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public TracksRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                   int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.search_item, parent, false);
 
@@ -70,19 +71,21 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Artist artist = artists.get(position);
+        Track track = tracks.get(position);
         String imagePath;
-        if (!artist.images.isEmpty())
-            imagePath = artist.images.get(0).url;
+
+        if (!track.album.images.isEmpty())
+            imagePath = track.album.images.get(0).url;
         else
             //set Default Image Path
-            imagePath = viewHolder.artistImageView.getContext().getString(R.string.defaulf_image_path);
+            imagePath = viewHolder.albumImage.getContext().getString(R.string.defaulf_image_path);
 
-        Picasso.with(viewHolder.artistImageView.getContext())
+        Picasso.with(viewHolder.albumImage.getContext())
                 .load(imagePath)
-                .into(viewHolder.artistImageView);
+                .into(viewHolder.albumImage);
 
-        viewHolder.artistName.setText(artist.name);
+        viewHolder.albumName.setText(track.album.name);
+        viewHolder.trackName.setText(track.name);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
 
 
@@ -91,7 +94,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return artists.size();
+        return tracks.size();
     }
 
 
