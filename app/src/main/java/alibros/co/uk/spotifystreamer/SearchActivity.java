@@ -50,6 +50,8 @@ public class SearchActivity extends AppCompatActivity {
 
         abSpotify = new ABSpotify();
 
+        getSupportActionBar().setTitle("Spotify Streamer");
+
         searchEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -123,6 +125,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SearchActivity.this, TracksActivity.class);
                 intent.putExtra("ARTISTID",artist.id);
+                intent.putExtra("ARTISTNAME", artist.name);
                 startActivity(intent);
 
 

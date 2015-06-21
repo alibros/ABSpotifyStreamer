@@ -43,9 +43,16 @@ public class TracksActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         resultsRecyclerView.setLayoutManager(layoutManager);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         abSpotify = new ABSpotify();
 
         String artistid = getIntent().getStringExtra("ARTISTID");
+        String artistname = getIntent().getStringExtra("ARTISTNAME");
+
+        getSupportActionBar().setSubtitle(artistname);
+        getSupportActionBar().setTitle("Top 10 Tracks");
 
         TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String countryCode = tm.getSimCountryIso();
@@ -98,6 +105,10 @@ public class TracksActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == android.R.id.home) {
+            onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
