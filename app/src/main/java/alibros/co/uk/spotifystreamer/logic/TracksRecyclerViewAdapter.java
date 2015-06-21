@@ -31,8 +31,8 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
     }
 
 
-    public TracksRecyclerViewAdapter(List<Track> artists, TracksRecyclerViewAdapterListener listener) {
-        this.tracks = artists;
+    public TracksRecyclerViewAdapter(List<Track> tracks, TracksRecyclerViewAdapterListener listener) {
+        this.tracks = tracks;
         this.listener = listener;
     }
 
@@ -63,7 +63,7 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
     public TracksRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                    int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.search_item, parent, false);
+                .inflate(R.layout.track_item, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;

@@ -1,17 +1,27 @@
 package alibros.co.uk.spotifystreamer;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+import java.util.prefs.Preferences;
+
 import alibros.co.uk.spotifystreamer.logic.ABSpotify;
+import alibros.co.uk.spotifystreamer.logic.TracksRecyclerViewAdapter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Track;
 
 
-public class TracksActivity extends ActionBarActivity {
+public class TracksActivity extends AppCompatActivity {
 
     @InjectView(R.id.results_recyler_view)
     RecyclerView resultsRecyclerView;
@@ -20,6 +30,7 @@ public class TracksActivity extends ActionBarActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
     private ABSpotify abSpotify;
+    private List<Track> tracks;
 
 
     @Override
@@ -28,9 +39,47 @@ public class TracksActivity extends ActionBarActivity {
         setContentView(R.layout.activity_track);
         ButterKnife.inject(this);
 
+        resultsRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        resultsRecyclerView.setLayoutManager(layoutManager);
+
         abSpotify = new ABSpotify();
+
+        String artistid = getIntent().getStringExtra("ARTISTID");
+
+        TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCode = tm.getSimCountryIso();
+
+        abSpotify.searchForTracks(artistid, countryCode ,new ABSpotify.ABSpotifySearchTracksListener() {
+            @Override
+            public void onSearchSuccessfulWithResult(List<Track> _tracks) {
+                    tracks = _tracks;
+                    updateUI();
+            }
+
+            @Override
+            public void onSearchError() {
+
+            }
+        });
     }
 
+    private void updateUI() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerAdapter = new TracksRecyclerViewAdapter(tracks, new TracksRecyclerViewAdapter.TracksRecyclerViewAdapterListener() {
+                    @Override
+                    public void itemClicked(Track track) {
+
+                    }
+                });
+
+                resultsRecyclerView.setAdapter(recyclerAdapter);
+            }
+
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
