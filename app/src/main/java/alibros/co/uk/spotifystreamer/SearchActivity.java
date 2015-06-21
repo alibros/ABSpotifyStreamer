@@ -1,5 +1,6 @@
 package alibros.co.uk.spotifystreamer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -10,8 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,9 +38,12 @@ public class SearchActivity extends AppCompatActivity {
     @InjectView(R.id.search_edit_text) EditText searchEditText;
     @InjectView(R.id.results_recyler_view) RecyclerView resultRecyclerView;
 
-    //
+    //arbitrary id
     private final int TRIGGER_SERACH = 1;
+
+    //a guesstimate delay time based on average typing speed
     private final long SEARCH_TRIGGER_DELAY_IN_MS = 1000;
+
     private ABSpotify abSpotify;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
@@ -50,7 +57,8 @@ public class SearchActivity extends AppCompatActivity {
 
         abSpotify = new ABSpotify();
 
-        getSupportActionBar().setTitle("Spotify Streamer");
+        //Setting action bar title
+        getSupportActionBar().setTitle(R.string.search_activity_title);
 
         searchEditText.addTextChangedListener(new TextWatcher() {
 
@@ -66,11 +74,27 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                handler.removeMessages(TRIGGER_SERACH);
-                handler.sendEmptyMessageDelayed(TRIGGER_SERACH, SEARCH_TRIGGER_DELAY_IN_MS);
+                //Only search if at least 2 Characters have been entered.
+                if (s.length()>1) {
+                    handler.removeMessages(TRIGGER_SERACH);
+                    handler.sendEmptyMessageDelayed(TRIGGER_SERACH, SEARCH_TRIGGER_DELAY_IN_MS);
+                }
             }
 
         });
+
+        //Hide the keyboard when Search button is pressed.
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+                }
+                return false;
+            }
+        });
+
 
         //Set the Recyycler View
         resultRecyclerView.setHasFixedSize(true);
@@ -89,11 +113,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (artists.size() == 0){
-
-                        Toast.makeText(SearchActivity.this,"No artists",Toast.LENGTH_LONG).show();
-
-
-
+                        Toast.makeText(SearchActivity.this, R.string.no_artist_error_text,Toast.LENGTH_LONG).show();
                     } else {
                         updateRecylcerView(artists);
                     }
@@ -108,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(SearchActivity.this,"ERROR",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchActivity.this, R.string.spotify_call_error_text,Toast.LENGTH_LONG).show();
 
                 }
             });
@@ -124,8 +144,8 @@ public class SearchActivity extends AppCompatActivity {
             public void itemClicked(Artist artist) {
 
                 Intent intent = new Intent(SearchActivity.this, TracksActivity.class);
-                intent.putExtra("ARTISTID",artist.id);
-                intent.putExtra("ARTISTNAME", artist.name);
+                intent.putExtra(getString(R.string.artistid_intent_tag),artist.id);
+                intent.putExtra(getString(R.string.artistname_intent_tag), artist.name);
                 startActivity(intent);
 
 
@@ -175,10 +195,6 @@ public class SearchActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -10,10 +10,12 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
 import alibros.co.uk.spotifystreamer.logic.ABSpotify;
+import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import alibros.co.uk.spotifystreamer.logic.TracksRecyclerViewAdapter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,7 +77,22 @@ public class TracksActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                recyclerAdapter = new TracksRecyclerViewAdapter(tracks, new TracksRecyclerViewAdapter.TracksRecyclerViewAdapterListener() {
+
+                //Save the tracks in SharedPreferences
+                List<ParcelableTrack> pTracks = new ArrayList<ParcelableTrack>();
+
+                for (Track track : tracks) {
+                    ParcelableTrack pTrack = new ParcelableTrack(track);
+                    pTracks.add(pTrack);
+
+                }
+
+                //As per the requirements, locally saving the last top 10 tracks.
+                ParcelableTrack.saveTop10Tracks(pTracks,TracksActivity.this);
+
+
+
+                recyclerAdapter = new TracksRecyclerViewAdapter(TracksActivity.this.tracks, new TracksRecyclerViewAdapter.TracksRecyclerViewAdapterListener() {
                     @Override
                     public void itemClicked(Track track) {
 
@@ -102,10 +119,6 @@ public class TracksActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         if (id == android.R.id.home) {
             onBackPressed();

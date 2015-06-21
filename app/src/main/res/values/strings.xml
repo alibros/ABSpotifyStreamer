@@ -8,5 +8,12 @@
     <string name="title_activity_player">PlayerActivity</string>
     <string name="tag_cell_position">CELLPOSITIONTAG</string>
     <string name="defaulf_image_path">https://developer.android.com/assets/images/android_logo@2x.png</string>
+    <string name="search_activity_title">Spotify Streamer</string>
+    <string name="artistid_intent_tag">ARTISTID</string>
+    <string name="artistname_intent_tag">ARTISTNAME</string>
+    <string name="no_artist_error_text">No artists has been found matching your query. Please try again</string>
+    <string name="spotify_call_error_text">Oops! Something went wrong please try again!</string>
+    <string name="preferences_tag">uk.co.alibros.spotifystreamer</string>
+    <string name="top10TracksTag">TOP10Tracks</string>
 
 </resources>
