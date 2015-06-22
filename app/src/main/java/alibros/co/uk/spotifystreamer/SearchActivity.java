@@ -19,9 +19,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import alibros.co.uk.spotifystreamer.logic.ABSpotify;
+import alibros.co.uk.spotifystreamer.logic.ParcelableArtist;
 import alibros.co.uk.spotifystreamer.logic.SearchRecyclerViewAdapter;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,6 +50,8 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
 
+    private ArrayList<ParcelableArtist> pArtists = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +61,17 @@ public class SearchActivity extends AppCompatActivity {
 
         abSpotify = new ABSpotify();
 
+
         //Setting action bar title
         getSupportActionBar().setTitle(R.string.search_activity_title);
+
+        if (savedInstanceState!=null)
+        pArtists = savedInstanceState.getParcelableArrayList(getString(R.string.parcelable_artists_bundle_tag));
+
+
+        if (pArtists!=null)
+            if (pArtists.size()>0)
+                updateRecylcerView(pArtists);
 
         searchEditText.addTextChangedListener(new TextWatcher() {
 
@@ -112,10 +125,16 @@ public class SearchActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (artists.size() == 0){
-                        Toast.makeText(SearchActivity.this, R.string.no_artist_error_text,Toast.LENGTH_LONG).show();
+                    if (artists.size() == 0) {
+                        Toast.makeText(SearchActivity.this, R.string.no_artist_error_text, Toast.LENGTH_LONG).show();
                     } else {
-                        updateRecylcerView(artists);
+                        pArtists = new ArrayList<ParcelableArtist>();
+                        for (Artist artist : artists) {
+                            ParcelableArtist pa = new ParcelableArtist(artist);
+                            pArtists.add(pa);
+
+                        }
+                        updateRecylcerView(pArtists);
                     }
                 }
             });
@@ -137,11 +156,11 @@ public class SearchActivity extends AppCompatActivity {
         }
     };
 
-    private void updateRecylcerView(List<Artist> artists) {
+    private void updateRecylcerView(List<ParcelableArtist> artists) {
 
         recyclerAdapter = new SearchRecyclerViewAdapter(artists, new SearchRecyclerViewAdapter.SearchRecyclerViewAdapterListener() {
             @Override
-            public void itemClicked(Artist artist) {
+            public void itemClicked(ParcelableArtist artist) {
 
                 Intent intent = new Intent(SearchActivity.this, TracksActivity.class);
                 intent.putExtra(getString(R.string.artistid_intent_tag),artist.id);
@@ -159,6 +178,14 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getString(R.string.parcelable_artists_bundle_tag),pArtists);
+
+
+
+    }
 
     private Handler handler = new Handler() {
         @Override

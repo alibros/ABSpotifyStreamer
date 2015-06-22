@@ -15,5 +15,7 @@
     <string name="spotify_call_error_text">Oops! Something went wrong please try again!</string>
     <string name="preferences_tag">uk.co.alibros.spotifystreamer</string>
     <string name="top10TracksTag">TOP10Tracks</string>
+    <string name="no_tracks_found_tag">No top tracks have been found for this artist</string>
+    <string name="parcelable_artists_bundle_tag">ARTISTS</string>
 
 </resources>

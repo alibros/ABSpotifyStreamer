@@ -22,16 +22,16 @@ import kaaes.spotify.webapi.android.models.Artist;
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
 
     private final SearchRecyclerViewAdapterListener listener;
-    private List<Artist> artists;
+    private List<ParcelableArtist> artists;
 
     public interface SearchRecyclerViewAdapterListener{
 
-        void itemClicked(Artist artist);
+        void itemClicked(ParcelableArtist artist);
 
     }
 
 
-    public SearchRecyclerViewAdapter(List<Artist> artists, SearchRecyclerViewAdapterListener listener) {
+    public SearchRecyclerViewAdapter(List<ParcelableArtist> artists, SearchRecyclerViewAdapterListener listener) {
         this.artists = artists;
         this.listener = listener;
     }
@@ -70,10 +70,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Artist artist = artists.get(position);
+        ParcelableArtist artist = artists.get(position);
         String imagePath;
-        if (!artist.images.isEmpty())
-            imagePath = artist.images.get(0).url;
+        if (artist.pImageUrl!="")
+            imagePath = artist.pImageUrl;
         else
             //set Default Image Path
             imagePath = viewHolder.artistImageView.getContext().getString(R.string.defaulf_image_path);
@@ -82,7 +82,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 .load(imagePath)
                 .into(viewHolder.artistImageView);
 
-        viewHolder.artistName.setText(artist.name);
+        viewHolder.artistName.setText(artist.pName);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
 
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +64,15 @@ public class TracksActivity extends AppCompatActivity {
             @Override
             public void onSearchSuccessfulWithResult(List<Track> _tracks) {
                     tracks = _tracks;
+                    if (tracks.size()==0){
+                        Toast.makeText(TracksActivity.this, R.string.no_tracks_found_tag,Toast.LENGTH_LONG).show();
+                    }
                     updateUI();
             }
 
             @Override
             public void onSearchError() {
-
+                Toast.makeText(TracksActivity.this, R.string.spotify_call_error_text, Toast.LENGTH_LONG).show();
             }
         });
     }
