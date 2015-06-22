@@ -65,14 +65,23 @@ public class TracksActivity extends AppCompatActivity {
             public void onSearchSuccessfulWithResult(List<Track> _tracks) {
                     tracks = _tracks;
                     if (tracks.size()==0){
-                        Toast.makeText(TracksActivity.this, R.string.no_tracks_found_tag,Toast.LENGTH_LONG).show();
+                        displayErrorToastWithText(getString(R.string.no_tracks_found_tag));
                     }
                     updateUI();
             }
 
             @Override
             public void onSearchError() {
-                Toast.makeText(TracksActivity.this, R.string.spotify_call_error_text, Toast.LENGTH_LONG).show();
+                displayErrorToastWithText(getString(R.string.spotify_call_error_text));
+            }
+        });
+    }
+
+    private void displayErrorToastWithText(final String errorText){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(TracksActivity.this, errorText, Toast.LENGTH_LONG).show();
             }
         });
     }

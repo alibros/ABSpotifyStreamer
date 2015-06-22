@@ -163,8 +163,8 @@ public class SearchActivity extends AppCompatActivity {
             public void itemClicked(ParcelableArtist artist) {
 
                 Intent intent = new Intent(SearchActivity.this, TracksActivity.class);
-                intent.putExtra(getString(R.string.artistid_intent_tag),artist.id);
-                intent.putExtra(getString(R.string.artistname_intent_tag), artist.name);
+                intent.putExtra(getString(R.string.artistid_intent_tag),artist.pId);
+                intent.putExtra(getString(R.string.artistname_intent_tag), artist.pName);
                 startActivity(intent);
 
 
