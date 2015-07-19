@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener {
+public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener {
 
 
     private boolean isOnTablet;
@@ -91,6 +91,18 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
 
         if (isOnTablet){
 
+            tracksFragment = new TracksFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(getString(R.string.artist_id_bundle_key), artistID);
+            bundle.putString(getString(R.string.artist_name_bundle_key), artistName);
+            tracksFragment.setArguments(bundle);
+
+            transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.tracks_fragment_container, tracksFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
 
         } else {
             Intent intent = new Intent(this, TracksActivity.class);
@@ -98,5 +110,10 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
             intent.putExtra(getString(R.string.artistname_intent_tag), artistName);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void trackSelected() {
+
     }
 }

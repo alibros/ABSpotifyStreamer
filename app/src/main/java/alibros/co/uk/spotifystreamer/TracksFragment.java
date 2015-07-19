@@ -38,6 +38,15 @@ public class TracksFragment extends Fragment {
     private List<Track> tracks;
 
 
+    //Listener Interface
+    public interface TracksFragmentListener {
+        void trackSelected();
+    }
+
+    private TracksFragmentListener mListener;
+
+
+
     public TracksFragment() {
         // Required empty public constructor
     }
@@ -115,6 +124,9 @@ public class TracksFragment extends Fragment {
                     @Override
                     public void itemClicked(Track track) {
 
+                        if (mListener != null) {
+                            mListener.trackSelected();
+                        }
                     }
                 });
 
@@ -137,6 +149,12 @@ public class TracksFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+            mListener = (TracksFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
 
     }
 

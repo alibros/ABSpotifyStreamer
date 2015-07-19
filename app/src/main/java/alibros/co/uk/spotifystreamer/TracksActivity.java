@@ -1,6 +1,7 @@
 package alibros.co.uk.spotifystreamer;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +14,7 @@ import butterknife.ButterKnife;
 import kaaes.spotify.webapi.android.models.Track;
 
 
-public class TracksActivity extends AppCompatActivity {
-
-
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter recyclerAdapter;
-    private ABSpotify abSpotify;
-    private List<Track> tracks;
+public class TracksActivity extends AppCompatActivity implements TracksFragment.TracksFragmentListener {
 
 
     private TracksFragment tracksFragment;
@@ -72,5 +67,11 @@ public class TracksActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void trackSelected() {
+        Intent intent = new Intent(this, PlayerActivity.class);
+        startActivity(intent);
     }
 }
