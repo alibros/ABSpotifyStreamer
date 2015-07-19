@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -49,8 +50,11 @@ public class PlayerFragment extends Fragment {
     //Seekbar
     @InjectView(R.id.player_seekbar) SeekBar seekBar;
 
+    //playButton
+    @InjectView(R.id.play_button) ImageButton playButton;
 
 
+    private boolean trackIsLoaded;
 
 
     public PlayerFragment() {
@@ -83,6 +87,9 @@ public class PlayerFragment extends Fragment {
     }
 
     private void loadCurrentTrack() {
+
+        trackIsLoaded = false;
+
         if (mMediaPlayer == null){
             mMediaPlayer = new MediaPlayer();
         } else {
@@ -104,7 +111,9 @@ public class PlayerFragment extends Fragment {
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
+                    trackIsLoaded = true;
                     mediaPlayer.start();
+                    playButton.setImageResource(android.R.drawable.ic_media_pause);
                 }
             });
             mMediaPlayer.prepareAsync();
@@ -112,7 +121,7 @@ public class PlayerFragment extends Fragment {
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-
+                    playButton.setImageResource(android.R.drawable.ic_media_play);
                 }
             });
 
@@ -139,7 +148,17 @@ public class PlayerFragment extends Fragment {
         mCurrentTrack = mTracks.get(mCurrentIndex);
         loadCurrentTrack();
     }
-    @OnClick(R.id.play_button) void playPressed(){}
+    @OnClick(R.id.play_button) void playPressed(){
+        if (!trackIsLoaded) return;
+
+        if(mMediaPlayer.isPlaying()){
+            playButton.setImageResource(android.R.drawable.ic_media_play);
+            mMediaPlayer.pause();
+        }else{
+            playButton.setImageResource(android.R.drawable.ic_media_pause);
+            mMediaPlayer.start();
+        }
+    }
 
 
 
