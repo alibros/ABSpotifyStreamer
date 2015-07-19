@@ -1,10 +1,12 @@
 package alibros.co.uk.spotifystreamer;
 
 import android.app.Activity;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 import java.util.List;
 
 import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
@@ -78,12 +83,43 @@ public class PlayerFragment extends Fragment {
     }
 
     private void loadCurrentTrack() {
-        if (mMediaPlayer != null) mMediaPlayer = new MediaPlayer();
+        if (mMediaPlayer == null){
+            mMediaPlayer = new MediaPlayer();
+        } else {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+        }
 
         //Update Views
         albumName.setText(mCurrentTrack.albumName);
-        trackName.setText(mCurrentTrack.name);
+        trackName.setText(mCurrentTrack.pName);
         artistName.setText(mCurrentTrack.artistName);
+
+        Picasso.with(getActivity()).load(mCurrentTrack.albumCoverUrl).into(albumArt);
+
+
+        try {
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setDataSource(mCurrentTrack.previewUrl);
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.start();
+                }
+            });
+            mMediaPlayer.prepareAsync();
+
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+
+                }
+            });
+
+
+        }
+        catch (IOException e) { Log.w("IO Exception: ", e.toString()); }
+
 
 
     }
@@ -126,6 +162,9 @@ public class PlayerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mMediaPlayer.stop();
+        mMediaPlayer.reset();
+        mMediaPlayer.release();
     }
 
     public interface PlayerFragmentListener {

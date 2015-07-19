@@ -40,7 +40,7 @@ public class TracksFragment extends Fragment {
 
     //Listener Interface
     public interface TracksFragmentListener {
-        void trackSelected();
+        void trackSelected(int trackIndex);
     }
 
     private TracksFragmentListener mListener;
@@ -122,10 +122,10 @@ public class TracksFragment extends Fragment {
 
                 recyclerAdapter = new TracksRecyclerViewAdapter(TracksFragment.this.tracks, new TracksRecyclerViewAdapter.TracksRecyclerViewAdapterListener() {
                     @Override
-                    public void itemClicked(Track track) {
+                    public void itemClicked(int trackIndex) {
 
                         if (mListener != null) {
-                            mListener.trackSelected();
+                            mListener.trackSelected(trackIndex);
                         }
                     }
                 });

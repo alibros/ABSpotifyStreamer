@@ -70,8 +70,9 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
     }
 
     @Override
-    public void trackSelected() {
+    public void trackSelected(int index) {
         Intent intent = new Intent(this, PlayerActivity.class);
+        intent.putExtra(getString(R.string.current_index_bundle_key),index);
         startActivity(intent);
     }
 }

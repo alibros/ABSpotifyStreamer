@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
     }
 
     @Override
-    public void trackSelected() {
+    public void trackSelected(int index) {
 
     }
 }

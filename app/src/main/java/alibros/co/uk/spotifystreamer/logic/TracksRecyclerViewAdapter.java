@@ -26,7 +26,7 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
 
     public interface TracksRecyclerViewAdapterListener{
 
-        void itemClicked(Track track);
+        void itemClicked(int trackIndex);
 
     }
 
@@ -53,7 +53,7 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
         @Override
         public void onClick(View view) {
             int position = (int)view.getTag(R.string.tag_cell_position);
-            listener.itemClicked(tracks.get(position));
+            listener.itemClicked(position);
 
         }
     }
