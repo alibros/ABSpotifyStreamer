@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="alibros.co.uk.spotifystreamer.SearchFragment">
+
+    <EditText android:id="@+id/search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search..."
+        android:singleLine="true"
+        android:inputType="text"
+        android:imeOptions="actionSearch" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/results_recyler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_edit_text" />
+
+</RelativeLayout>
