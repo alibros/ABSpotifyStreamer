@@ -6,18 +6,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener {
+public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener, PlayerFragment.PlayerFragmentListener{
 
 
     private boolean isOnTablet;
+    private boolean playerIsVisible;
     SearchFragment searchFragment;
     TracksFragment tracksFragment;
+    PlayerFragment playerFragment;
     FragmentTransaction transaction;
+
+    @InjectView(R.id.player_fragment_container) FrameLayout playerContainer;
 
 
 
@@ -44,18 +49,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
 
         }
 
-
         isOnTablet = getResources().getBoolean(R.bool.isTablet);
-        if (isOnTablet){
-
-
-
-        } else {
-
-
-
-
-        }
 
     }
 
@@ -115,5 +109,33 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
     @Override
     public void trackSelected(int index) {
 
+        if (playerFragment==null) {
+
+            playerFragment = new PlayerFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(getString(R.string.current_index_bundle_key), index);
+            playerFragment.setArguments(bundle);
+
+            transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.player_fragment_container, playerFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
+            playerFragment.newTrackSelected(index);
+        }
+
+        playerContainer.setVisibility(View.VISIBLE);
+        playerIsVisible = true;
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (playerIsVisible){
+            playerContainer.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -3,7 +3,7 @@ package alibros.co.uk.spotifystreamer;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -24,7 +24,6 @@ import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import kaaes.spotify.webapi.android.models.Track;
 
 
 public class PlayerFragment extends Fragment {
@@ -55,6 +54,8 @@ public class PlayerFragment extends Fragment {
 
 
     private boolean trackIsLoaded;
+    private SeekTrack seekerTask;
+    private int currentPostion;
 
 
     public PlayerFragment() {
@@ -81,6 +82,28 @@ public class PlayerFragment extends Fragment {
         ButterKnife.inject(this,view);
 
         loadCurrentTrack();
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                currentPostion = i;
+                if (mMediaPlayer!=null && b) {
+
+                    mMediaPlayer.seekTo(currentPostion);
+
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
 
         return view;
@@ -112,8 +135,13 @@ public class PlayerFragment extends Fragment {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     trackIsLoaded = true;
-                    mediaPlayer.start();
-                    playButton.setImageResource(android.R.drawable.ic_media_pause);
+
+                    seekBar.setMax(mMediaPlayer.getDuration());
+                    int minutes = (int)(mMediaPlayer.getDuration()/60000);
+                    int seconds = (int) (mMediaPlayer.getDuration() * .001) - minutes;
+                    duration.setText(minutes+":" + seconds);
+                    playTrack();
+
                 }
             });
             mMediaPlayer.prepareAsync();
@@ -133,7 +161,17 @@ public class PlayerFragment extends Fragment {
 
     }
 
+    private void playTrack(){
+        mMediaPlayer.start();
+        playButton.setImageResource(android.R.drawable.ic_media_pause);
+        seekerTask = (SeekTrack) new SeekTrack().execute();
+    }
 
+    private void pauseTrack(){
+        mMediaPlayer.pause();
+        playButton.setImageResource(android.R.drawable.ic_media_play);
+        if (seekerTask!=null)seekerTask.cancel(true);
+    }
 
     @OnClick(R.id.next_button) void nextPressed(){
         mCurrentIndex += 1;
@@ -152,13 +190,65 @@ public class PlayerFragment extends Fragment {
         if (!trackIsLoaded) return;
 
         if(mMediaPlayer.isPlaying()){
-            playButton.setImageResource(android.R.drawable.ic_media_play);
-            mMediaPlayer.pause();
+            pauseTrack();
         }else{
-            playButton.setImageResource(android.R.drawable.ic_media_pause);
-            mMediaPlayer.start();
+            playTrack();
         }
     }
+
+    public void newTrackSelected(int index) {
+        if (mCurrentIndex<mTracks.size()){
+            mCurrentTrack = mTracks.get(index);
+            loadCurrentTrack();
+        }
+    }
+
+
+    private class SeekTrack extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... args){
+            while(mMediaPlayer.isPlaying()) {
+
+                try{
+                    Thread.sleep(100);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                publishProgress();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+                if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
+                    seekBar.setProgress(mMediaPlayer.getCurrentPosition());
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            int minutes = (int) (mMediaPlayer.getCurrentPosition() / 60000);
+                            int seconds = (int) (mMediaPlayer.getCurrentPosition() * .001) - minutes;
+
+                            timeProgress.setText(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+                        }
+                    });
+                }
+
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
 
 
 
@@ -177,10 +267,12 @@ public class PlayerFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        seekerTask.cancel(true);
         mMediaPlayer.stop();
         mMediaPlayer.reset();
         mMediaPlayer.release();

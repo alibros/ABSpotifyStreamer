@@ -34,7 +34,6 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
             bundle.putInt(getString(R.string.current_index_bundle_key),getIntent().getIntExtra(getString(R.string.current_index_bundle_key),0));
             playersFragment.setArguments(bundle);
 
-
             transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.player_fragment_container, playersFragment);
             transaction.addToBackStack(null);
