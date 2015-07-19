@@ -11,13 +11,21 @@
         android:hint="Search..."
         android:singleLine="true"
         android:inputType="text"
-        android:imeOptions="actionSearch" />
+        android:imeOptions="actionSearch"
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/results_recyler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_edit_text" />
+        android:layout_below="@+id/search_edit_text"
+        android:visibility="gone"/>
+
+    <fragment android:name="alibros.co.uk.spotifystreamer.SearchFragment"
+        android:id="@+id/search_artist_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:layout="@layout/fragment_search" />
 
 
 </RelativeLayout>
