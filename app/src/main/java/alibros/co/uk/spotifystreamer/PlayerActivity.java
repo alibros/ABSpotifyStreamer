@@ -1,19 +1,40 @@
 package alibros.co.uk.spotifystreamer;
 
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.ButterKnife;
 
 
 //This activity will be used in the 2nd Stage of the project
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements PlayerFragment.PlayerFragmentListener {
+
+    private PlayerFragment playersFragment;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        ButterKnife.inject(this);
+
+        if (null == savedInstanceState) {
+
+            playersFragment = new PlayerFragment();
+
+            Bundle bundle = new Bundle();
+            playersFragment.setArguments(bundle);
+
+            transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.player_fragment_container, playersFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        }
+
     }
 
     @Override

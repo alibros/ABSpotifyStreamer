@@ -1,10 +1,115 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
     tools:context="alibros.co.uk.spotifystreamer.PlayerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+        <TextView android:id="@+id/artist_name"
+            android:text="Muse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"/>
+
+        <TextView android:id="@+id/album_name"
+            android:text="The 2nd Law"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/artist_name"/>
+
+        <ImageView android:id="@+id/cover_art"
+            android:layout_marginTop="6dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_below="@+id/album_name"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView android:id="@+id/song_name"
+            android:layout_marginTop="6dp"
+            android:text="Supremacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/cover_art"/>
+
+        <SeekBar
+            android:id="@+id/song_seekbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:max="100"
+            android:progress="0"
+            android:secondaryProgress="0"
+            android:layout_below="@id/song_name"/>
+
+        <TextView android:id="@+id/progress"
+            android:text="0:00"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/song_seekbar"/>
+
+        <TextView android:id="@+id/time"
+            android:text="0:00"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/song_seekbar"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress">
+
+            <ImageButton android:id="@+id/previousBtn"
+                android:src="@android:drawable/ic_media_previous"
+                android:tint="@color/primary_dark_material_dark"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_below="@id/song_seekbar"/>
+
+            <ImageButton android:id="@+id/play_button"
+                android:src="@android:drawable/ic_media_play"
+                android:tint="@color/primary_dark_material_dark"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1.0"
+                android:layout_below="@id/song_seekbar"
+                android:layout_toRightOf="@id/previousBtn"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
+            <ImageButton android:id="@+id/pause_button"
+                android:src="@android:drawable/ic_media_pause"
+                android:tint="@color/primary_dark_material_dark"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1.0"
+                android:layout_below="@id/song_seekbar"
+                android:layout_toRightOf="@id/previousBtn"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone" />
+
+            <ImageButton android:id="@+id/next_button"
+                android:src="@android:drawable/ic_media_next"
+                android:tint="@color/primary_dark_material_dark"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_below="@id/song_seekbar"
+                android:layout_toRightOf="@id/play_button"/>
+
+        </LinearLayout>
+
+
+</RelativeLayout>
