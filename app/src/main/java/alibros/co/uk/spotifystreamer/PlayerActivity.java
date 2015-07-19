@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import butterknife.ButterKnife;
 
 
@@ -14,6 +17,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
     private PlayerFragment playersFragment;
     private FragmentTransaction transaction;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,77 +5,77 @@
     tools:context="alibros.co.uk.spotifystreamer.PlayerFragment">
 
 
-        <TextView android:id="@+id/artist_name"
+        <TextView android:id="@+id/player_artist_name"
             android:text="Muse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:gravity="center"/>
 
-        <TextView android:id="@+id/album_name"
+        <TextView android:id="@+id/player_album_name"
             android:text="The 2nd Law"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_below="@id/artist_name"/>
+            android:layout_below="@id/player_artist_name"/>
 
-        <ImageView android:id="@+id/cover_art"
+        <ImageView android:id="@+id/player_album_art"
             android:layout_marginTop="6dp"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_below="@+id/album_name"
+            android:layout_below="@id/player_album_name"
             android:layout_centerHorizontal="true"/>
 
-        <TextView android:id="@+id/song_name"
+        <TextView android:id="@+id/player_track_name"
             android:layout_marginTop="6dp"
             android:text="Supremacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_below="@id/cover_art"/>
+            android:layout_below="@id/player_album_art"/>
 
         <SeekBar
-            android:id="@+id/song_seekbar"
+            android:id="@+id/player_seekbar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:max="100"
             android:progress="0"
             android:secondaryProgress="0"
-            android:layout_below="@id/song_name"/>
+            android:layout_below="@id/player_track_name"/>
 
-        <TextView android:id="@+id/progress"
+        <TextView android:id="@+id/player_time_progress"
             android:text="0:00"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="-10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/song_seekbar"/>
+            android:layout_below="@id/player_seekbar"/>
 
-        <TextView android:id="@+id/time"
+        <TextView android:id="@+id/player_duration"
             android:text="0:00"
             android:layout_marginRight="20dp"
             android:layout_marginTop="-10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/song_seekbar"/>
+            android:layout_below="@id/player_seekbar"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progress">
+            android:layout_below="@id/player_time_progress">
 
-            <ImageButton android:id="@+id/previousBtn"
+            <ImageButton android:id="@+id/previous_button"
                 android:src="@android:drawable/ic_media_previous"
                 android:tint="@color/primary_dark_material_dark"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:layout_below="@id/song_seekbar"/>
+                android:layout_below="@id/player_seekbar"/>
 
             <ImageButton android:id="@+id/play_button"
                 android:src="@android:drawable/ic_media_play"
@@ -83,8 +83,8 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1.0"
-                android:layout_below="@id/song_seekbar"
-                android:layout_toRightOf="@id/previousBtn"
+                android:layout_below="@id/player_seekbar"
+                android:layout_toRightOf="@id/previous_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
 
@@ -94,8 +94,8 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1.0"
-                android:layout_below="@id/song_seekbar"
-                android:layout_toRightOf="@id/previousBtn"
+                android:layout_below="@id/player_seekbar"
+                android:layout_toRightOf="@id/previous_button"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:visibility="gone" />
@@ -106,7 +106,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:layout_below="@id/song_seekbar"
+                android:layout_below="@id/player_seekbar"
                 android:layout_toRightOf="@id/play_button"/>
 
         </LinearLayout>

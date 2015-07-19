@@ -23,5 +23,6 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="artist_id_bundle_key">ARTISTID</string>
     <string name="artist_name_bundle_key">ARTISTNAME</string>
+    <string name="current_index_bundle_key">CURRENTINDEX</string>
 
 </resources>

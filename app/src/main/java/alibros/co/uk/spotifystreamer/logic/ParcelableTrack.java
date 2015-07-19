@@ -23,6 +23,8 @@ public class ParcelableTrack extends Track implements Parcelable {
     public String artistName;
     public String pName;
     public String albumName;
+    public String albumCoverUrl;
+    public String previewUrl;
 
 
     public static final Creator<ParcelableTrack> CREATOR =
@@ -45,6 +47,12 @@ public class ParcelableTrack extends Track implements Parcelable {
         pName = track.name;
         artistName = track.artists.get(0).name;
         albumName = track.album.name;
+        if (!track.album.images.isEmpty())
+            albumCoverUrl = track.album.images.get(0).url;
+        else
+            //set Default Image Path
+            albumCoverUrl = "https://developer.android.com/assets/images/android_logo@2x.png";
+        previewUrl = track.preview_url;
     }
 
     private ParcelableTrack(Parcel in) {
@@ -52,6 +60,9 @@ public class ParcelableTrack extends Track implements Parcelable {
         pName = in.readString();
         artistName = in.readString();
         albumName = in.readString();
+        albumCoverUrl = in.readString();
+        previewUrl = in.readString();
+
     }
 
     @Override
@@ -65,6 +76,8 @@ public class ParcelableTrack extends Track implements Parcelable {
         dest.writeString(pName);
         dest.writeString(artistName);
         dest.writeString(albumName);
+        dest.writeString(albumCoverUrl);
+        dest.writeString(previewUrl);
     }
 
 
@@ -82,8 +95,8 @@ public class ParcelableTrack extends Track implements Parcelable {
     }
 
     //Loading the top 10 Tracks from SharedPreferences.
-    public static List<Track> loadTop10Tracks(Context ctx){
-        List<Track> tracks;
+    public static List<ParcelableTrack> loadTop10Tracks(Context ctx){
+        List<ParcelableTrack> tracks;
         SharedPreferences prefs = ctx.getSharedPreferences(
                 ctx.getString(R.string.preferences_tag), Context.MODE_PRIVATE);
 
