@@ -88,9 +88,15 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
 
     @Override
     public void searchItemSelected(String artistID, String artistName) {
-        Intent intent = new Intent(this, TracksActivity.class);
-        intent.putExtra(getString(R.string.artistid_intent_tag),artistID);
-        intent.putExtra(getString(R.string.artistname_intent_tag), artistName);
-        startActivity(intent);
+
+        if (isOnTablet){
+
+
+        } else {
+            Intent intent = new Intent(this, TracksActivity.class);
+            intent.putExtra(getString(R.string.artistid_intent_tag), artistID);
+            intent.putExtra(getString(R.string.artistname_intent_tag), artistName);
+            startActivity(intent);
+        }
     }
 }
