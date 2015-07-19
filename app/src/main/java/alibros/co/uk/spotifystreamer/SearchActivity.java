@@ -46,7 +46,10 @@ public class SearchActivity extends AppCompatActivity {
     //a guesstimate delay time based on average typing speed
     private final long SEARCH_TRIGGER_DELAY_IN_MS = 1000;
 
+    //Spotify AP Custom Interface Class
     private ABSpotify abSpotify;
+
+
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
 
