@@ -22,7 +22,7 @@ import kaaes.spotify.webapi.android.models.Track;
 public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecyclerViewAdapter.ViewHolder> {
 
     private final TracksRecyclerViewAdapterListener listener;
-    private List<Track> tracks;
+    private List<ParcelableTrack> tracks;
 
     public interface TracksRecyclerViewAdapterListener{
 
@@ -31,7 +31,7 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
     }
 
 
-    public TracksRecyclerViewAdapter(List<Track> tracks, TracksRecyclerViewAdapterListener listener) {
+    public TracksRecyclerViewAdapter(List<ParcelableTrack> tracks, TracksRecyclerViewAdapterListener listener) {
         this.tracks = tracks;
         this.listener = listener;
     }
@@ -71,20 +71,16 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Track track = tracks.get(position);
+        ParcelableTrack track = tracks.get(position);
         String imagePath;
 
-        if (!track.album.images.isEmpty())
-            imagePath = track.album.images.get(0).url;
-        else
-            //set Default Image Path
-            imagePath = viewHolder.albumImage.getContext().getString(R.string.defaulf_image_path);
+        imagePath = track.albumCoverUrl;
 
         Picasso.with(viewHolder.albumImage.getContext())
                 .load(imagePath)
                 .into(viewHolder.albumImage);
 
-        viewHolder.albumName.setText(track.album.name);
+        viewHolder.albumName.setText(track.albumName);
         viewHolder.trackName.setText(track.name);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
 

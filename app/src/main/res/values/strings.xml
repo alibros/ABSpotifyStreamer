@@ -24,5 +24,6 @@
     <string name="artist_id_bundle_key">ARTISTID</string>
     <string name="artist_name_bundle_key">ARTISTNAME</string>
     <string name="current_index_bundle_key">CURRENTINDEX</string>
+    <string name="parcelable_tracks_bundle_tag">parcelable_tracks_bundle_tag</string>
 
 </resources>

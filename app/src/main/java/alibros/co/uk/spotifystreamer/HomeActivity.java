@@ -22,7 +22,8 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
     PlayerFragment playerFragment;
     FragmentTransaction transaction;
 
-    @InjectView(R.id.player_fragment_container) FrameLayout playerContainer;
+    FrameLayout playerContainer;
+
 
 
 
@@ -50,6 +51,9 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
         }
 
         isOnTablet = getResources().getBoolean(R.bool.isTablet);
+        if (isOnTablet) {
+            playerContainer = (FrameLayout)findViewById(R.id.player_fragment_container);
+        }
 
     }
 
