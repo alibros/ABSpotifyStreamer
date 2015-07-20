@@ -80,11 +80,13 @@ public class TracksFragment extends Fragment {
         }
 
 
+        String locale = getActivity().getResources().getConfiguration().locale.getCountry();
+        if (locale == null || locale == ""){
+            locale  = "US";
+        }
 
-        TelephonyManager tm = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getSimCountryIso();
 
-        abSpotify.searchForTracks(artistid, countryCode ,new ABSpotify.ABSpotifySearchTracksListener() {
+        abSpotify.searchForTracks(artistid, locale ,new ABSpotify.ABSpotifySearchTracksListener() {
             @Override
             public void onSearchSuccessfulWithResult(List<Track> _tracks) {
                 tracks = _tracks;
