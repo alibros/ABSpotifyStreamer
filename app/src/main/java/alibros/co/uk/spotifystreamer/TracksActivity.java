@@ -27,18 +27,14 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
         setContentView(R.layout.activity_track);
         ButterKnife.inject(this);
 
-        String artistid = getIntent().getStringExtra("ARTISTID");
         String artistname = getIntent().getStringExtra("ARTISTNAME");
+
+        getActionBar().setTitle("Top 10 Tracks");
+        getActionBar().setSubtitle(artistname);
 
         if (null == savedInstanceState) {
 
             tracksFragment = new TracksFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(getString(R.string.artist_id_bundle_key), artistid);
-            bundle.putString(getString(R.string.artist_name_bundle_key), artistname);
-            tracksFragment.setArguments(bundle);
-
             transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.tracks_fragment_container, tracksFragment);
             transaction.addToBackStack(null);

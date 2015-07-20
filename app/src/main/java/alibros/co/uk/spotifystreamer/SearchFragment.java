@@ -147,23 +147,24 @@ public class SearchFragment extends Fragment {
     private ABSpotify.ABSpotifySearchArtistListener abSpotifyListener = new ABSpotify.ABSpotifySearchArtistListener() {
         @Override
         public void onSearchSuccessfulWithResult(final List<Artist> artists) {
+            if (getActivity()!=null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (artists.size() == 0) {
+                            Toast.makeText(getActivity(), R.string.no_artist_error_text, Toast.LENGTH_LONG).show();
+                        } else {
+                            pArtists = new ArrayList<ParcelableArtist>();
+                            for (Artist artist : artists) {
+                                ParcelableArtist pa = new ParcelableArtist(artist);
+                                pArtists.add(pa);
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (artists.size() == 0) {
-                        Toast.makeText(getActivity(), R.string.no_artist_error_text, Toast.LENGTH_LONG).show();
-                    } else {
-                        pArtists = new ArrayList<ParcelableArtist>();
-                        for (Artist artist : artists) {
-                            ParcelableArtist pa = new ParcelableArtist(artist);
-                            pArtists.add(pa);
-
+                            }
+                            updateRecylcerView(pArtists);
                         }
-                        updateRecylcerView(pArtists);
                     }
-                }
-            });
+                });
+            }
 
         }
 

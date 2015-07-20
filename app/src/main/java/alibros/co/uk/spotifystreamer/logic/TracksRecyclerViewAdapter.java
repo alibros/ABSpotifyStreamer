@@ -81,7 +81,7 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
                 .into(viewHolder.albumImage);
 
         viewHolder.albumName.setText(track.albumName);
-        viewHolder.trackName.setText(track.name);
+        viewHolder.trackName.setText(track.pName);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
 
 

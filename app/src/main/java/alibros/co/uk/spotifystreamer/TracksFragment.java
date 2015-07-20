@@ -34,7 +34,6 @@ public class TracksFragment extends Fragment {
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter recyclerAdapter;
-    private ABSpotify abSpotify;
     private List<ParcelableTrack> tracks;
 
 
@@ -70,50 +69,9 @@ public class TracksFragment extends Fragment {
         resultsRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         resultsRecyclerView.setLayoutManager(layoutManager);
+        tracks =  ParcelableTrack.loadTop10Tracks(getActivity());
+        updateUI();
 
-        String artistid = "", artistname = "";
-
-        abSpotify = new ABSpotify();
-        if (getArguments()!=null) {
-             artistid = getArguments().getString(getActivity().getString(R.string.artist_id_bundle_key));
-             artistname = getArguments().getString(getActivity().getString(R.string.artist_name_bundle_key));
-        }
-
-
-        String locale = getActivity().getResources().getConfiguration().locale.getCountry();
-        if (locale == null || locale == ""){
-            locale  = "US";
-        }
-
-        if (savedInstanceState!=null){
-            //this could also be read directly from the savedINstanceState
-            tracks =  ParcelableTrack.loadTop10Tracks(getActivity());
-            updateUI();
-        } else {
-
-            abSpotify.searchForTracks(artistid, locale, new ABSpotify.ABSpotifySearchTracksListener() {
-                @Override
-                public void onSearchSuccessfulWithResult(List<Track> _tracks) {
-                    List<ParcelableTrack> pTracks = new ArrayList<ParcelableTrack>();
-
-                    for (Track track : _tracks) {
-                        ParcelableTrack pTrack = new ParcelableTrack(track);
-                        pTracks.add(pTrack);
-
-                    }
-                    tracks = pTracks;
-                    if (tracks.size() == 0) {
-                        displayErrorToastWithText(getString(R.string.no_tracks_found_tag));
-                    }
-                    updateUI();
-                }
-
-                @Override
-                public void onSearchError() {
-                    displayErrorToastWithText(getString(R.string.spotify_call_error_text));
-                }
-            });
-        }
         return view;
     }
 
@@ -121,14 +79,6 @@ public class TracksFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                //Save the tracks in SharedPreferences
-
-
-                //As per the requirements, locally saving the last top 10 tracks.
-                ParcelableTrack.saveTop10Tracks(tracks, getActivity());
-
-
                 recyclerAdapter = new TracksRecyclerViewAdapter(TracksFragment.this.tracks, new TracksRecyclerViewAdapter.TracksRecyclerViewAdapterListener() {
                     @Override
                     public void itemClicked(int trackIndex) {
@@ -145,22 +95,7 @@ public class TracksFragment extends Fragment {
         });
     }
 
-    private void displayErrorToastWithText(final String errorText){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getActivity(), errorText, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        ArrayList<ParcelableTrack> ptracks = (ArrayList<ParcelableTrack>) ParcelableTrack.loadTop10Tracks(getActivity());
-        outState.putParcelableArrayList(getString(R.string.parcelable_tracks_bundle_tag),ptracks);
-    }
 
 
     @Override

@@ -8,9 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import alibros.co.uk.spotifystreamer.logic.ABSpotify;
+import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import kaaes.spotify.webapi.android.models.Track;
 
 public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener, PlayerFragment.PlayerFragmentListener{
 
@@ -85,7 +92,62 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
     }
 
     @Override
-    public void searchItemSelected(String artistID, String artistName) {
+    public void searchItemSelected(String artistID, final String artistName) {
+
+
+        ABSpotify abSpotify = new ABSpotify();
+        String locale = getResources().getConfiguration().locale.getCountry();
+        if (locale == null || locale == ""){
+            locale  = "US";
+        }
+        abSpotify.searchForTracks(artistID, locale, new ABSpotify.ABSpotifySearchTracksListener() {
+            @Override
+            public void onSearchSuccessfulWithResult(List<Track> _tracks) {
+                List<ParcelableTrack> pTracks = new ArrayList<ParcelableTrack>();
+
+                for (Track track : _tracks) {
+                    ParcelableTrack pTrack = new ParcelableTrack(track);
+                    pTracks.add(pTrack);
+
+                }
+
+                if (pTracks.size() == 0) {
+                    displayErrorToastWithText(getString(R.string.no_tracks_found_tag));
+                } else {
+
+
+                    //Save the tracks in SharedPreferences
+                    //As per the requirements, locally saving the last top 10 tracks.
+                    ParcelableTrack.saveTop10Tracks(pTracks, HomeActivity.this);
+                    if (isOnTablet){
+
+                        tracksFragment = new TracksFragment();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.tracks_fragment_container, tracksFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+
+                    } else {
+                        Intent intent = new Intent(HomeActivity.this, TracksActivity.class);
+                        intent.putExtra("ARTISTNAME",artistName);
+                        startActivity(intent);
+                    }
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onSearchError() {
+                displayErrorToastWithText(getString(R.string.spotify_call_error_text));
+            }
+        });
+
+
+
 
         if (isOnTablet){
 
@@ -109,6 +171,16 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
             startActivity(intent);
         }
     }
+
+    private void displayErrorToastWithText(final String errorText){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(HomeActivity.this, errorText, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     @Override
     public void trackSelected(int index) {

@@ -197,6 +197,7 @@ public class PlayerFragment extends Fragment {
     }
 
     public void newTrackSelected(int index) {
+        mTracks = ParcelableTrack.loadTop10Tracks(getActivity());
         if (mCurrentIndex<mTracks.size()){
             mCurrentTrack = mTracks.get(index);
             loadCurrentTrack();
