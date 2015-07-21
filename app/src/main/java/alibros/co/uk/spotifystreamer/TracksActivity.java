@@ -1,7 +1,9 @@
 package alibros.co.uk.spotifystreamer;
 
+import android.annotation.TargetApi;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +69,15 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //As recommended by the review
+    @Override @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public Intent getParentActivityIntent() {
+        // add the clear top flag - which checks if the parent (main)
+        // activity is already running and avoids recreating it
+        return super.getParentActivityIntent()
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOError;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,14 +64,30 @@ public class PlayerFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("SEEKPOSITION", currentPostion);
+        outState.putInt("TRACKINDEX", mCurrentIndex);
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mCurrentIndex = getArguments().getInt(getActivity().getString(R.string.current_index_bundle_key));
             mTracks = ParcelableTrack.loadTop10Tracks(getActivity());
-            if (mCurrentIndex<mTracks.size()){
-                mCurrentTrack = mTracks.get(mCurrentIndex);
-            }
+        }
+
+        if (savedInstanceState!=null) {
+            currentPostion = savedInstanceState.getInt("SEEKPOSITION");
+            mCurrentIndex = savedInstanceState.getInt("TRACKINDEX");
+        }
+
+        if (mCurrentIndex<mTracks.size()){
+            mCurrentTrack = mTracks.get(mCurrentIndex);
         }
     }
 
@@ -86,9 +103,9 @@ public class PlayerFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                currentPostion = i;
-                if (mMediaPlayer!=null && b) {
 
+                if (mMediaPlayer!=null && b) {
+                    currentPostion = i;
                     mMediaPlayer.seekTo(currentPostion);
 
                 }
@@ -162,7 +179,11 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playTrack(){
+
         mMediaPlayer.start();
+        if (currentPostion!= 0){
+            mMediaPlayer.seekTo(currentPostion);
+        }
         playButton.setImageResource(android.R.drawable.ic_media_pause);
         seekerTask = (SeekTrack) new SeekTrack().execute();
     }
@@ -174,6 +195,7 @@ public class PlayerFragment extends Fragment {
     }
 
     @OnClick(R.id.next_button) void nextPressed(){
+        currentPostion = 0;
         mCurrentIndex += 1;
         if (mCurrentIndex>=mTracks.size()) mCurrentIndex = 0;
         mCurrentTrack = mTracks.get(mCurrentIndex);
@@ -184,6 +206,7 @@ public class PlayerFragment extends Fragment {
         mCurrentIndex -= 1;
         if (mCurrentIndex<0) mCurrentIndex = mTracks.size()-1;
         mCurrentTrack = mTracks.get(mCurrentIndex);
+        currentPostion = 0;
         loadCurrentTrack();
     }
     @OnClick(R.id.play_button) void playPressed(){
@@ -226,20 +249,26 @@ public class PlayerFragment extends Fragment {
         @Override
         protected void onProgressUpdate(Void... values) {
 
-                if (mMediaPlayer!=null && mMediaPlayer.isPlaying()) {
-                    seekBar.setProgress(mMediaPlayer.getCurrentPosition());
+            try {
+                if (mMediaPlayer != null)
+                    if (mMediaPlayer.isPlaying()) {
+                        seekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                        currentPostion = mMediaPlayer.getCurrentPosition();
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                            int minutes = (int) (mMediaPlayer.getCurrentPosition() / 60000);
-                            int seconds = (int) (mMediaPlayer.getCurrentPosition() * .001) - minutes;
+                                int minutes = (int) (mMediaPlayer.getCurrentPosition() / 60000);
+                                int seconds = (int) (mMediaPlayer.getCurrentPosition() * .001) - minutes;
 
-                            timeProgress.setText(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
-                        }
-                    });
-                }
+                                timeProgress.setText(minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+                            }
+                        });
+                    }
+            } catch ( IOError e){
+
+            }
 
             super.onProgressUpdate(values);
         }
