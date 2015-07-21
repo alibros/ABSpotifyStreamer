@@ -23,10 +23,11 @@
 
         <ImageView android:id="@+id/player_album_art"
             android:layout_marginTop="6dp"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_below="@id/player_album_name"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/player_track_name" />
 
     <LinearLayout
         android:orientation="horizontal"

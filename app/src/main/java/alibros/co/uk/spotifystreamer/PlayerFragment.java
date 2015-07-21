@@ -251,12 +251,6 @@ public class PlayerFragment extends Fragment {
     }
 
 
-
-
-
-
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -273,10 +267,14 @@ public class PlayerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        seekerTask.cancel(true);
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
+        if (seekerTask!=null) {
+            seekerTask.cancel(true);
+        }
+        if (mMediaPlayer!=null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+        }
     }
 
     public interface PlayerFragmentListener {

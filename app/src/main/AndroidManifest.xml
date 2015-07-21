@@ -13,12 +13,16 @@
         <activity
             android:name=".TracksActivity"
             android:label="@string/title_activity_track" >
-
-            <!-- android:parentActivityName=".SearchActivity" > -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomeActivity" />
         </activity>
         <activity
             android:name=".PlayerActivity"
             android:label="@string/title_activity_player" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TracksActivity" />
         </activity>
         <activity
             android:name=".HomeActivity"

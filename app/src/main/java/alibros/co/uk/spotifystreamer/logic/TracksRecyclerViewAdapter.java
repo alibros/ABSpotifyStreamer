@@ -90,7 +90,11 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return tracks.size();
+        if(tracks !=null) {
+            return tracks.size();
+        }
+        else
+            return 0;
     }
 
 

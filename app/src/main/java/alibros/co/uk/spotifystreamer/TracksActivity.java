@@ -3,6 +3,7 @@ package alibros.co.uk.spotifystreamer;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -29,8 +30,11 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
 
         String artistname = getIntent().getStringExtra("ARTISTNAME");
 
-        getActionBar().setTitle("Top 10 Tracks");
-        getActionBar().setSubtitle(artistname);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setTitle("Top 10 Tracks");
+        getSupportActionBar().setSubtitle(artistname);
 
         if (null == savedInstanceState) {
 
@@ -59,7 +63,7 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
 
 
         if (id == android.R.id.home) {
-            onBackPressed();
+            NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);
