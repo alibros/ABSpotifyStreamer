@@ -17,9 +17,11 @@ import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by Ali on 21/06/15.
+ * Custom class to add Parecelability to Spotify Tracks class.
  */
 public class ParcelableTrack extends Track implements Parcelable {
 
+    //TODO:Add other Track properties
     public String artistName;
     public String pName;
     public String albumName;
@@ -42,7 +44,7 @@ public class ParcelableTrack extends Track implements Parcelable {
 
             };
 
-    //Constructor to create a Parcelable track from Spotify's Track.
+    //Constructor to create a Parcelable track from Spotify SDK Track class.
     public ParcelableTrack(Track track) {
         pName = track.name;
         artistName = track.artists.get(0).name;

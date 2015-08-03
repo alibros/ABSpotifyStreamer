@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="alibros.co.uk.spotifystreamer.SearchFragment">
+    tools:context="alibros.co.uk.spotifystreamer.SearchFragment"
+    android:background="@android:color/background_light">
 
     <EditText android:id="@+id/search_edit_text"
         android:layout_width="match_parent"
@@ -9,12 +10,18 @@
         android:hint="Search..."
         android:singleLine="true"
         android:inputType="text"
-        android:imeOptions="actionSearch" />
+        android:imeOptions="actionSearch"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/results_recyler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/search_edit_text" />
+        android:layout_below="@+id/search_edit_text"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp" />
 
 </RelativeLayout>

@@ -6,20 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.List;
-
-import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import butterknife.ButterKnife;
 
 
-//This activity will be used in the 2nd Stage of the project
+/*
+ * Acticity to display the player on phone UI. On tablets, Player Fragment will be committed in HomeActivity
+ */
 public class PlayerActivity extends AppCompatActivity implements PlayerFragment.PlayerFragmentListener {
 
     private PlayerFragment playersFragment;
     private FragmentTransaction transaction;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +25,18 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         if (null == savedInstanceState) {
-
             playersFragment = new PlayerFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putInt(getString(R.string.current_index_bundle_key),getIntent().getIntExtra(getString(R.string.current_index_bundle_key),0));
+            bundle.putInt(getString(R.string.current_index_bundle_key), getIntent().getIntExtra(getString(R.string.current_index_bundle_key), 0));
             playersFragment.setArguments(bundle);
 
             transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.player_fragment_container, playersFragment);
             transaction.addToBackStack(null);
             transaction.commit();
-
         }
-
     }
 
     @Override
@@ -56,14 +48,11 @@ public class PlayerActivity extends AppCompatActivity implements PlayerFragment.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
-
 
         return super.onOptionsItemSelected(item);
     }

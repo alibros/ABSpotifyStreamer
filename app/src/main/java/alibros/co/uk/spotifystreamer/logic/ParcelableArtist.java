@@ -7,10 +7,11 @@ import kaaes.spotify.webapi.android.models.Artist;
 
 /**
  * Created by Ali on 22/06/15.
+ * Custom class to add Parecelability(is that a word?)to Spotify Artist class
  */
 public class ParcelableArtist extends Artist implements Parcelable {
 
-
+    // TODO:Currently only these 3 properties are used. Should be extended to all Artist properties.
     public String pName;
     public String pId;
     public String pImageUrl;
@@ -31,16 +32,17 @@ public class ParcelableArtist extends Artist implements Parcelable {
             };
 
     public ParcelableArtist(Artist artist) {
+
         pName = artist.name;
         pId = artist.id;
-
+        //Artist can have a null images property.
         if (artist.images.size()>0) pImageUrl = artist.images.get(0).url;
     }
 
     private ParcelableArtist(Parcel in) {
+
         pName = in.readString();
         pId = in.readString();
-
         if (in.dataAvail() > 0) pImageUrl = in.readString();
     }
 

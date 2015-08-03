@@ -18,6 +18,7 @@ import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by Ali on 19/06/15.
+ * Adapter for Tracks Recycler View. (See TracksFragment)
  */
 public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecyclerViewAdapter.ViewHolder> {
 
@@ -25,24 +26,19 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
     private List<ParcelableTrack> tracks;
 
     public interface TracksRecyclerViewAdapterListener{
-
         void itemClicked(int trackIndex);
-
     }
-
 
     public TracksRecyclerViewAdapter(List<ParcelableTrack> tracks, TracksRecyclerViewAdapterListener listener) {
         this.tracks = tracks;
         this.listener = listener;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.track_name) TextView trackName;
         @InjectView(R.id.album_name) TextView albumName;
         @InjectView(R.id.track_image_view) ImageView albumImage;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -54,14 +50,14 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
         public void onClick(View view) {
             int position = (int)view.getTag(R.string.tag_cell_position);
             listener.itemClicked(position);
-
         }
     }
-
 
     @Override
     public TracksRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                                    int viewType) {
+
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.track_item, parent, false);
 
@@ -83,8 +79,6 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
         viewHolder.albumName.setText(track.albumName);
         viewHolder.trackName.setText(track.pName);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -96,8 +90,4 @@ public class TracksRecyclerViewAdapter extends RecyclerView.Adapter<TracksRecycl
         else
             return 0;
     }
-
-
-
-
 }

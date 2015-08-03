@@ -36,15 +36,12 @@ public class TracksFragment extends Fragment {
     private RecyclerView.Adapter recyclerAdapter;
     private List<ParcelableTrack> tracks;
 
-
     //Listener Interface
     public interface TracksFragmentListener {
         void trackSelected(int trackIndex);
     }
 
     private TracksFragmentListener mListener;
-
-
 
     public TracksFragment() {
         // Required empty public constructor
@@ -64,12 +61,12 @@ public class TracksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tracks, container, false);
 
-        ButterKnife.inject(this,view);
+        ButterKnife.inject(this, view);
 
         resultsRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         resultsRecyclerView.setLayoutManager(layoutManager);
-        tracks =  ParcelableTrack.loadTop10Tracks(getActivity());
+        tracks = ParcelableTrack.loadTop10Tracks(getActivity());
         updateUI();
 
         return view;
@@ -88,15 +85,11 @@ public class TracksFragment extends Fragment {
                         }
                     }
                 });
-
                 resultsRecyclerView.setAdapter(recyclerAdapter);
             }
 
         });
     }
-
-
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -107,7 +100,6 @@ public class TracksFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override

@@ -18,6 +18,7 @@ import kaaes.spotify.webapi.android.models.Artist;
 
 /**
  * Created by Ali on 19/06/15.
+ * Adapter for the artist Search Recycler View (see SearchFragment)
  */
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
 
@@ -27,21 +28,17 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public interface SearchRecyclerViewAdapterListener{
 
         void itemClicked(ParcelableArtist artist);
-
     }
-
 
     public SearchRecyclerViewAdapter(List<ParcelableArtist> artists, SearchRecyclerViewAdapterListener listener) {
         this.artists = artists;
         this.listener = listener;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.artist_name_textview) TextView artistName;
         @InjectView(R.id.artist_image_view) ImageView artistImageView;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -53,10 +50,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         public void onClick(View view) {
             int position = (int)view.getTag(R.string.tag_cell_position);
             listener.itemClicked(artists.get(position));
-
         }
     }
-
 
     @Override
     public SearchRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -85,7 +80,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         viewHolder.artistName.setText(artist.pName);
         viewHolder.itemView.setTag(R.string.tag_cell_position, position);
 
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -93,8 +87,4 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public int getItemCount() {
         return artists.size();
     }
-
-
-
-
 }

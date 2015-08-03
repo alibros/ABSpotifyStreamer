@@ -10,19 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import java.util.List;
 
 import alibros.co.uk.spotifystreamer.logic.ABSpotify;
 import butterknife.ButterKnife;
 import kaaes.spotify.webapi.android.models.Track;
 
-
+/*
+ * Activity containing TracksFragment - Phone UI only
+ */
 public class TracksActivity extends AppCompatActivity implements TracksFragment.TracksFragmentListener {
-
 
     private TracksFragment tracksFragment;
     private FragmentTransaction transaction;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,7 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
 
         String artistname = getIntent().getStringExtra("ARTISTNAME");
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         getSupportActionBar().setTitle("Top 10 Tracks");
         getSupportActionBar().setSubtitle(artistname);
 
@@ -72,10 +71,12 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
     }
 
     //As recommended by the review
-    @Override @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public Intent getParentActivityIntent() {
         // add the clear top flag - which checks if the parent (main)
         // activity is already running and avoids recreating it
+        if  (super.getParentActivityIntent() == null) return  null;
         return super.getParentActivityIntent()
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
@@ -83,7 +84,7 @@ public class TracksActivity extends AppCompatActivity implements TracksFragment.
     @Override
     public void trackSelected(int index) {
         Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra(getString(R.string.current_index_bundle_key),index);
+        intent.putExtra(getString(R.string.current_index_bundle_key), index);
         startActivity(intent);
     }
 }

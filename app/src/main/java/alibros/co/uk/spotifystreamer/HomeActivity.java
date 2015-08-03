@@ -9,30 +9,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import alibros.co.uk.spotifystreamer.logic.ABSpotify;
 import alibros.co.uk.spotifystreamer.logic.ParcelableTrack;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import kaaes.spotify.webapi.android.models.Track;
 
-public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener, PlayerFragment.PlayerFragmentListener{
-
+/*
+ * Starting Activity of the app. This Activity is responsible for detective tablet/phone and presenting the
+ * appropriate layout based on screen size.
+ */
+public class HomeActivity extends AppCompatActivity implements SearchFragment.SearchFragmentListener, TracksFragment.TracksFragmentListener, PlayerFragment.PlayerFragmentListener {
 
     private boolean isOnTablet;
     private boolean playerIsVisible;
+
     SearchFragment searchFragment;
     TracksFragment tracksFragment;
     PlayerFragment playerFragment;
     FragmentTransaction transaction;
 
     FrameLayout playerContainer;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +41,26 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
         //Init ButterKnife
         ButterKnife.inject(this);
 
+        setTitle("AB Spotify Streamer");
 
         /*
          * Search Fragment is present regardless of the screensize so
          * we initialize it and commit it here.
          */
-        if(null == savedInstanceState){
+        if (null == savedInstanceState) {
 
-        searchFragment = new SearchFragment();
-        transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.search_fragment_container, searchFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
+            searchFragment = new SearchFragment();
+            transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.search_fragment_container, searchFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         isOnTablet = getResources().getBoolean(R.bool.isTablet);
         if (isOnTablet) {
-            playerContainer = (FrameLayout)findViewById(R.id.player_fragment_container);
+            playerContainer = (FrameLayout) findViewById(R.id.player_fragment_container);
         }
-
     }
-
-
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,28 +71,18 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void searchItemSelected(String artistID, final String artistName) {
 
-
         ABSpotify abSpotify = new ABSpotify();
         String locale = getResources().getConfiguration().locale.getCountry();
-        if (locale == null || locale == ""){
-            locale  = "US";
+        if (locale == null || locale.equals("")) {
+            locale = "US";
         }
+
         abSpotify.searchForTracks(artistID, locale, new ABSpotify.ABSpotifySearchTracksListener() {
             @Override
             public void onSearchSuccessfulWithResult(List<Track> _tracks) {
@@ -108,36 +91,28 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
                 for (Track track : _tracks) {
                     ParcelableTrack pTrack = new ParcelableTrack(track);
                     pTracks.add(pTrack);
-
                 }
 
                 if (pTracks.size() == 0) {
                     displayErrorToastWithText(getString(R.string.no_tracks_found_tag));
                 } else {
 
-
                     //Save the tracks in SharedPreferences
-                    //As per the requirements, locally saving the last top 10 tracks.
                     ParcelableTrack.saveTop10Tracks(pTracks, HomeActivity.this);
-                    if (isOnTablet){
 
+                    if (isOnTablet) {
                         tracksFragment = new TracksFragment();
                         transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.tracks_fragment_container, tracksFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-
-
                     } else {
                         Intent intent = new Intent(HomeActivity.this, TracksActivity.class);
-                        intent.putExtra("ARTISTNAME",artistName);
+                        intent.putExtra("ARTISTNAME", artistName);
                         startActivity(intent);
                     }
 
                 }
-
-
-
             }
 
             @Override
@@ -146,10 +121,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
             }
         });
 
-
-
-
-        if (isOnTablet){
+        if (isOnTablet) {
 
             tracksFragment = new TracksFragment();
 
@@ -163,7 +135,6 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
             transaction.addToBackStack(null);
             transaction.commit();
 
-
         } else {
             Intent intent = new Intent(this, TracksActivity.class);
             intent.putExtra(getString(R.string.artistid_intent_tag), artistID);
@@ -172,7 +143,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
         }
     }
 
-    private void displayErrorToastWithText(final String errorText){
+    private void displayErrorToastWithText(final String errorText) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -185,7 +156,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
     @Override
     public void trackSelected(int index) {
 
-        if (playerFragment==null) {
+        if (playerFragment == null) {
 
             playerFragment = new PlayerFragment();
 
@@ -208,7 +179,7 @@ public class HomeActivity extends AppCompatActivity implements SearchFragment.Se
 
     @Override
     public void onBackPressed() {
-        if (playerIsVisible){
+        if (playerIsVisible) {
             playerContainer.setVisibility(View.GONE);
         } else {
             super.onBackPressed();
